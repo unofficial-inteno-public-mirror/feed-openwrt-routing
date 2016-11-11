@@ -146,8 +146,14 @@ start() {
 			echo "bitrate_up=$(($upload * 1024 * 8))" >>$tmpconf
 		}
 
-		[ -n "${presentation_url}" ] && \
+		if [ -n "${presentation_url}" ]; then
 			echo "presentation_url=${presentation_url}" >>$tmpconf
+		elif [ -n "${intiface}" ]; then
+			local ipaddr
+			network_get_ipaddr ipaddr "${intiface}"
+			[ -n "${ipaddr}" ] && \
+				echo "presentation_url=${ipaddr}" >>$tmpconf
+		fi
 
 		[ -n "${notify_interval}" ] && \
 			echo "notify_interval=${notify_interval}" >>$tmpconf
